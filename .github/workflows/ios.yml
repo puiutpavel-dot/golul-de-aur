@@ -1,0 +1,90 @@
+# Build iOS pe GitHub Actions.
+# La fiecare push pe cod: verificare (compilare pentru simulator).
+# Manual: Actions -> "iOS" -> Run workflow -> alegi actiunea.
+#   verificare  - compileaza pentru simulator
+#   testflight  - verificare + build semnat urcat in TestFlight
+#
+# Secrete necesare pentru testflight (Settings -> Secrets and variables -> Actions):
+#   ASC_KEY_ID, ASC_ISSUER_ID, ASC_PRIVATE_KEY (continutul fisierului AuthKey_XXXX.p8, cheie cu rol Admin)
+name: iOS
+
+on:
+  push:
+    paths:
+      - "GolulDeAur/**"
+      - "project.yml"
+      - "scripts/ci/**"
+      - ".github/workflows/ios.yml"
+  workflow_dispatch:
+    inputs:
+      actiune:
+        description: Ce rulez
+        type: choice
+        options: [verificare, testflight]
+        default: verificare
+
+concurrency:
+  group: ios
+  cancel-in-progress: false
+
+env:
+  BUNDLE_ID: ro.draghicioiu.goluldeaur
+  APP_NAME: Golul de Aur
+  OUT_DIR: ${{ github.workspace }}/ci-out
+  ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+  ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+  ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+
+jobs:
+  ios:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Xcode (cea mai noua versiune de pe masina)
+        run: |
+          XC=$(ls -d /Applications/Xcode_*.app | grep -v -i beta | sort -V | tail -1)
+          sudo xcode-select -s "$XC"
+          xcodebuild -version
+
+      - name: Verifica secretele
+        if: inputs.actiune == 'testflight'
+        run: |
+          missing=""
+          [ -n "$ASC_KEY_ID" ] || missing="$missing ASC_KEY_ID"
+          [ -n "$ASC_ISSUER_ID" ] || missing="$missing ASC_ISSUER_ID"
+          [ -n "$ASC_PRIVATE_KEY" ] || missing="$missing ASC_PRIVATE_KEY"
+          [ -z "$missing" ] || { echo "::error::Lipsesc secretele:$missing"; exit 1; }
+
+      - name: Genereaza proiectul Xcode
+        run: |
+          brew install xcodegen
+          xcodegen generate
+
+      - name: Build pentru simulator
+        run: bash scripts/ci/sim_build.sh
+
+      - uses: actions/setup-python@v5
+        if: inputs.actiune == 'testflight'
+        with:
+          python-version: "3.12"
+
+      - name: App Store Connect - bundle ID, echipa, numar de build
+        if: inputs.actiune == 'testflight'
+        run: |
+          pip install -q pyjwt cryptography
+          python scripts/asc_prepare.py
+
+      - name: Arhiva semnata + urcare in TestFlight
+        if: inputs.actiune == 'testflight'
+        run: bash scripts/ci/archive_upload.sh
+
+      - name: Jurnale
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jurnale-${{ github.run_number }}
+          if-no-files-found: ignore
+          retention-days: 14
+          path: ci-out/*.log
