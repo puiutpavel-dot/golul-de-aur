@@ -3,7 +3,7 @@
 # Manual: Actions -> "iOS" -> Run workflow -> alegi actiunea.
 #   verificare  - compileaza pentru simulator
 #   testflight  - verificare + build semnat urcat in TestFlight
-# TestFlight porneste si la un tag care incepe cu "testflight-" (ex: git tag testflight-1 && git push --tags).
+# TestFlight porneste si la un push pe ramura "testflight".
 #
 # Secrete necesare pentru testflight (Settings -> Secrets and variables -> Actions):
 #   ASC_KEY_ID, ASC_ISSUER_ID, ASC_PRIVATE_KEY (continutul fisierului AuthKey_XXXX.p8, cheie cu rol Admin)
@@ -16,8 +16,6 @@ on:
       - "project.yml"
       - "scripts/ci/**"
       - ".github/workflows/ios.yml"
-    tags:
-      - "testflight-*"
   workflow_dispatch:
     inputs:
       actiune:
@@ -31,7 +29,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  ACTIUNE: ${{ inputs.actiune || (startsWith(github.ref, 'refs/tags/testflight-') && 'testflight') || 'verificare' }}
+  ACTIUNE: ${{ inputs.actiune || (github.ref == 'refs/heads/testflight' && 'testflight') || 'verificare' }}
   BUNDLE_ID: ro.draghicioiu.goluldeaur
   APP_NAME: "Golden Goal: Daily Pick"
   OUT_DIR: ${{ github.workspace }}/ci-out
