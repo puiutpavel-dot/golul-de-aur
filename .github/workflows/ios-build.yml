@@ -1,0 +1,28 @@
+# Build de verificare (simulator, fara semnare).
+name: Build iOS
+
+on:
+  push:
+    paths:
+      - "GolulDeAur/**"
+      - "project.yml"
+      - ".github/workflows/ios-build.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instaleaza XcodeGen
+        run: brew install xcodegen
+      - name: Genereaza proiectul Xcode
+        run: xcodegen generate
+      - name: Compileaza pentru simulator
+        run: |
+          xcodebuild build \
+            -project GolulDeAur.xcodeproj \
+            -scheme GolulDeAur \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO
