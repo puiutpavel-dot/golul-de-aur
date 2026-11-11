@@ -63,8 +63,10 @@ def main():
     found = api("GET", f"/v1/bundleIds?filter[identifier]={BUNDLE_ID}&limit=20")["data"]
     bundle = next((b for b in found if b["attributes"]["identifier"] == BUNDLE_ID), None)
     if not bundle:
+        # Numele unui bundle ID accepta doar litere, cifre si spatii.
+        bundle_name = re.sub(r"\s+", " ", re.sub(r"[^A-Za-z0-9 ]", " ", APP_NAME)).strip()
         bundle = api("POST", "/v1/bundleIds", {"data": {"type": "bundleIds", "attributes": {
-            "identifier": BUNDLE_ID, "name": APP_NAME, "platform": "IOS"}}})["data"]
+            "identifier": BUNDLE_ID, "name": bundle_name, "platform": "IOS"}}})["data"]
         print(f"Bundle ID inregistrat acum: {BUNDLE_ID}")
     team = bundle["attributes"]["seedId"]
 
