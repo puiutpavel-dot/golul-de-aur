@@ -12,7 +12,7 @@ final class AppModel: ObservableObject {
     var todayMatch: Match? { matches.first }
 
     func myPick(for match: Match) -> String? {
-        progress.picks[match.day] ?? progress.history.first { $0.day == match.day }?.pick
+        progress.picks[match.day] ?? progress.history.first(where: { $0.day == match.day })?.pick
     }
 
     func refresh() async {
