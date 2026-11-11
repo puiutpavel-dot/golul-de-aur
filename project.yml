@@ -1,6 +1,7 @@
 name: GolulDeAur
 options:
   bundleIdPrefix: ro.draghicioiu
+  developmentLanguage: en
   deploymentTarget:
     iOS: "16.0"
 targets:
@@ -11,7 +12,8 @@ targets:
     info:
       path: GolulDeAur/Info.plist
       properties:
-        CFBundleDisplayName: Golul de Aur
+        CFBundleDisplayName: Golden Goal
+        CFBundleDevelopmentRegion: en
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
         UILaunchScreen: {}

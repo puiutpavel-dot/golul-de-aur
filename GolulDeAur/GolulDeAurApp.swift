@@ -20,10 +20,18 @@ enum Theme {
     static let wrong = Color(red: 0.80, green: 0.20, blue: 0.20)
 }
 
+/// Text tradus dupa limba telefonului (Resources/<limba>.lproj/Localizable.strings).
+func L(_ key: String) -> String {
+    NSLocalizedString(key, comment: "")
+}
+
+func L(_ key: String, _ args: CVarArg...) -> String {
+    String(format: NSLocalizedString(key, comment: ""), locale: Locale.current, arguments: args)
+}
+
 func formatPoints(_ value: Int) -> String {
     let formatter = NumberFormatter()
     formatter.numberStyle = .decimal
-    formatter.groupingSeparator = "."
-    formatter.usesGroupingSeparator = true
-    return (formatter.string(from: NSNumber(value: value)) ?? "\(value)") + " puncte"
+    let number = formatter.string(from: NSNumber(value: value)) ?? "\(value)"
+    return L("points.format", number)
 }

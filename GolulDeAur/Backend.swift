@@ -23,7 +23,7 @@ enum Backend {
 
         let (data, response) = try await URLSession.shared.data(for: request)
         guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
-            throw BackendError(message: "Nu am putut încărca meciul zilei. Încearcă din nou.")
+            throw BackendError(message: L("error.load"))
         }
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase

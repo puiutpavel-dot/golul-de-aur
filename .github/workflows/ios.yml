@@ -29,7 +29,7 @@ concurrency:
 
 env:
   BUNDLE_ID: ro.draghicioiu.goluldeaur
-  APP_NAME: Golul de Aur
+  APP_NAME: "Golden Goal: Daily Pick"
   OUT_DIR: ${{ github.workspace }}/ci-out
   ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
   ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}

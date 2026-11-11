@@ -1,6 +1,6 @@
-# Golul de Aur
+# Golden Goal (Golul de Aur)
 
-Joc iOS (SwiftUI): un meci real pe zi, 15 trepte până la un milion de puncte virtuale.
+Joc iOS (SwiftUI): un meci real pe zi, 15 trepte până la un milion de puncte virtuale. Tradus în 8 limbi (en, es, fr, de, pt-BR, it, ar, ro); aplicația urmează limba telefonului.
 
 - `GolulDeAur/` + `project.yml`: aplicația (proiectul Xcode se generează cu XcodeGen).
 - `scripts/sync.mjs`: alege zilnic meciul cu cele mai apropiate cote 1-X-2 și ia scorul final.

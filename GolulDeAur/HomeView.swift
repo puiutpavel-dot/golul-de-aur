@@ -21,7 +21,7 @@ struct HomeView: View {
                             model.pick(choice)
                         }
                     } else if model.hasLoaded {
-                        InfoCard(icon: "clock", text: "Meciul zilei apare în fiecare zi după ora 9:00.")
+                        InfoCard(icon: "clock", text: L("match.none"))
                     } else if model.isLoading {
                         ProgressView().tint(Theme.gold).padding(.top, 30)
                     }
@@ -56,10 +56,10 @@ struct HomeView: View {
     private var header: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Golul de Aur")
+                Text("Golden Goal")
                     .font(.system(size: 30, weight: .heavy, design: .rounded))
                     .foregroundStyle(.white)
-                Text("Un meci pe zi. 15 trepte până la milion.")
+                Text(L("app.tagline"))
                     .font(.caption)
                     .foregroundStyle(.white.opacity(0.7))
             }
@@ -85,7 +85,7 @@ struct LadderCard: View {
         Button(action: onTap) {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
-                    Text("Treapta \(player.level) din 15")
+                    Text(L("ladder.step", player.level))
                         .font(.caption)
                         .foregroundStyle(.white.opacity(0.7))
                     Spacer()
@@ -103,7 +103,7 @@ struct LadderCard: View {
                     .tint(Theme.gold)
 
                 HStack {
-                    Text("Următoarea treaptă: \(formatPoints(Ladder.points(forLevel: player.level + 1)))")
+                    Text(L("ladder.next", formatPoints(Ladder.points(forLevel: player.level + 1))))
                     Spacer()
                     Image(systemName: "chevron.right")
                 }
@@ -129,27 +129,26 @@ struct MatchCard: View {
     private var kickoffText: String {
         guard let kickoff = match.kickoff else { return "" }
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ro_RO")
-        formatter.dateFormat = "d MMMM, HH:mm"
+        formatter.setLocalizedDateFormatFromTemplate("dMMMMHHmm")
         return formatter.string(from: kickoff)
     }
 
     private var statusText: String {
         if match.isVoid {
-            return "Meciul nu s-a mai jucat. Rămâi pe aceeași treaptă."
+            return L("status.void")
         }
         if match.isFinished {
-            guard let pick = myPick else { return "Nu ai dat pronostic la acest meci." }
-            return pick == match.result ? "Ai ghicit! Ai urcat o treaptă." : "N-ai ghicit de data asta."
+            guard let pick = myPick else { return L("status.nopick") }
+            return pick == match.result ? L("status.correct") : L("status.wrong")
         }
         if isOpen {
             return myPick == nil
-                ? "Cine câștigă? Alege până la fluierul de start."
-                : "Pronostic salvat. Îl poți schimba până la start."
+                ? L("status.open.nopick")
+                : L("status.open.picked")
         }
         return myPick == nil
-            ? "Meciul a început. Pronosticurile s-au închis."
-            : "Meciul a început. Rezultatul apare după final."
+            ? L("status.started.nopick")
+            : L("status.started.picked")
     }
 
     var body: some View {
@@ -187,7 +186,7 @@ struct MatchCard: View {
                 .foregroundStyle(.white.opacity(0.85))
 
             option(letter: "A", choice: "1", title: match.homeTeam, odds: match.oddsHome)
-            option(letter: "B", choice: "X", title: "Egal", odds: match.oddsDraw)
+            option(letter: "B", choice: "X", title: L("option.draw"), odds: match.oddsDraw)
             option(letter: "C", choice: "2", title: match.awayTeam, odds: match.oddsAway)
         }
         .padding(18)
@@ -245,7 +244,7 @@ struct HistoryCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Ultimele pronosticuri")
+            Text(L("history.title"))
                 .font(.headline)
                 .foregroundStyle(.white)
 
@@ -259,7 +258,7 @@ struct HistoryCard: View {
                             .foregroundStyle(.white)
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
-                        Text("Ai ales: \(pickText(item))")
+                        Text(L("history.pick", pickText(item)))
                             .font(.caption)
                             .foregroundStyle(.white.opacity(0.6))
                     }
@@ -288,7 +287,7 @@ struct HistoryCard: View {
         switch item.pick {
         case "1": return item.homeTeam
         case "2": return item.awayTeam
-        default: return "Egal"
+        default: return L("option.draw")
         }
     }
 
@@ -353,11 +352,11 @@ struct LadderView: View {
                     .listRowBackground(step == level ? Theme.gold.opacity(0.25) : Color.clear)
                 }
             }
-            .navigationTitle("Scara de puncte")
+            .navigationTitle(L("ladder.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Gata") { dismiss() }
+                    Button(L("common.done")) { dismiss() }
                 }
             }
         }
@@ -370,25 +369,25 @@ struct RulesView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("Jocul") {
-                    Text("În fiecare zi primești un singur meci real: cel mai echilibrat al zilei, adică meciul cu cele mai apropiate cote.")
-                    Text("Alegi până la fluierul de start: A câștigă gazdele, B egal, C câștigă oaspeții.")
-                    Text("Dacă ai ghicit, urci o treaptă. După 15 trepte ajungi la un milion de puncte și începi o scară nouă.")
+                Section(L("rules.section.game")) {
+                    Text(L("rules.game1"))
+                    Text(L("rules.game2"))
+                    Text(L("rules.game3"))
                 }
-                Section("Praguri garantate") {
-                    Text("Dacă nu ghicești, cobori la ultimul prag garantat: treapta 5 (1.000 de puncte) sau treapta 10 (32.000 de puncte). Sub treapta 5 o iei de la zero.")
-                    Text("Dacă nu dai pronostic într-o zi, rămâi pe aceeași treaptă.")
+                Section(L("rules.section.safe")) {
+                    Text(L("rules.safe1", formatPoints(Ladder.points(forLevel: 5)), formatPoints(Ladder.points(forLevel: 10))))
+                    Text(L("rules.safe2"))
                 }
                 Section {
-                    Text("Punctele sunt virtuale și nu au valoare în bani. Cotele sunt afișate doar ca informație.")
+                    Text(L("rules.disclaimer"))
                         .foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("Cum se joacă")
+            .navigationTitle(L("rules.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Gata") { dismiss() }
+                    Button(L("common.done")) { dismiss() }
                 }
             }
         }
