@@ -38,3 +38,8 @@
 "match.final" = "Final";
 "ladder.here" = "Estás aquí";
 "ladder.safe" = "Garantizado";
+"tab.match" = "Partido";
+"tab.ladder" = "Escalera";
+"tab.history" = "Historial";
+"tab.profile" = "Perfil";
+"history.empty" = "Aquí aparecen tus pronósticos cuando terminan los partidos.";

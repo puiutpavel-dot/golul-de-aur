@@ -38,3 +38,8 @@
 "match.final" = "انتهت";
 "ladder.here" = "أنت هنا";
 "ladder.safe" = "مضمون";
+"tab.match" = "المباراة";
+"tab.ladder" = "السلّم";
+"tab.history" = "السجل";
+"tab.profile" = "الملف";
+"history.empty" = "تظهر توقعاتك هنا بعد انتهاء المباريات.";

@@ -38,3 +38,8 @@
 "match.final" = "Fim de jogo";
 "ladder.here" = "Você está aqui";
 "ladder.safe" = "Garantido";
+"tab.match" = "Jogo";
+"tab.ladder" = "Escada";
+"tab.history" = "Histórico";
+"tab.profile" = "Perfil";
+"history.empty" = "Seus palpites aparecem aqui depois que os jogos terminam.";

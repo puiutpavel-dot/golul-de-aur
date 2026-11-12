@@ -1,9 +1,44 @@
 import SwiftUI
+import UIKit
 
-struct HomeView: View {
+/// Radacina aplicatiei: meniul de jos cu cele 4 ecrane.
+struct RootView: View {
     @StateObject private var model = AppModel()
     @Environment(\.scenePhase) private var scenePhase
-    @State private var showRules = false
+
+    init() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(red: 0.01, green: 0.07, blue: 0.05, alpha: 1)
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+    }
+
+    var body: some View {
+        TabView {
+            MatchScreen(model: model)
+                .tabItem { Label(L("tab.match"), systemImage: "soccerball") }
+            LadderScreen(model: model)
+                .tabItem { Label(L("tab.ladder"), systemImage: "chart.bar.fill") }
+            HistoryScreen(model: model)
+                .tabItem { Label(L("tab.history"), systemImage: "clock.arrow.circlepath") }
+            ProfileScreen(model: model)
+                .tabItem { Label(L("tab.profile"), systemImage: "person.crop.circle.fill") }
+        }
+        .tint(Theme.gold)
+        .task { await model.refresh() }
+        .onChange(of: scenePhase) { phase in
+            if phase == .active {
+                Task { await model.refresh() }
+            }
+        }
+    }
+}
+
+/// Cadrul comun al ecranelor: fundalul de teren si continut derulabil.
+struct Screen<Content: View>: View {
+    let model: AppModel
+    @ViewBuilder let content: () -> Content
 
     var body: some View {
         ZStack {
@@ -11,46 +46,66 @@ struct HomeView: View {
 
             ScrollView {
                 VStack(spacing: 18) {
-                    header
-
-                    LadderCard(player: model.progress)
-
-                    StatsStrip(player: model.progress)
-
-                    if let match = model.todayMatch {
-                        MatchCard(match: match, myPick: model.myPick(for: match)) { choice in
-                            model.pick(choice)
-                        }
-                        .id(match.day)
-                    } else if model.hasLoaded {
-                        InfoCard(icon: "clock", text: L("match.none"))
-                    } else if model.isLoading {
-                        ProgressView().tint(Theme.gold).padding(.top, 30)
-                    }
-
-                    LadderBoard(level: model.progress.level)
-
-                    if !model.progress.history.isEmpty {
-                        HistoryCard(items: model.progress.history)
-                    }
-
-                    if let error = model.errorMessage {
-                        InfoCard(icon: "exclamationmark.triangle.fill", text: error)
-                    }
+                    content()
                 }
                 .padding(.horizontal, 18)
                 .padding(.vertical, 12)
             }
             .refreshable { await model.refresh() }
         }
-        .task { await model.refresh() }
-        .onChange(of: scenePhase) { phase in
-            if phase == .active {
-                Task { await model.refresh() }
+    }
+}
+
+struct ScreenHeader: View {
+    let icon: String
+    let title: String
+
+    var body: some View {
+        HStack(spacing: 12) {
+            ZStack {
+                Circle()
+                    .fill(Theme.goldGradient)
+                    .frame(width: 44, height: 44)
+                    .shadow(color: Theme.gold.opacity(0.6), radius: 10, x: 0, y: 0)
+                Image(systemName: icon)
+                    .font(.system(size: 21, weight: .bold))
+                    .foregroundStyle(Color.black.opacity(0.8))
             }
+            Text(title)
+                .font(.system(size: 28, weight: .heavy, design: .rounded))
+                .foregroundStyle(Theme.goldGradient)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+            Spacer()
         }
-        .sheet(isPresented: $showRules) {
-            RulesView()
+    }
+}
+
+// MARK: Ecranul Meci
+
+struct MatchScreen: View {
+    @ObservedObject var model: AppModel
+
+    var body: some View {
+        Screen(model: model) {
+            header
+
+            LadderCard(player: model.progress)
+
+            if let match = model.todayMatch {
+                MatchCard(match: match, myPick: model.myPick(for: match)) { choice in
+                    model.pick(choice)
+                }
+                .id(match.day)
+            } else if model.hasLoaded {
+                InfoCard(icon: "clock", text: L("match.none"))
+            } else if model.isLoading {
+                ProgressView().tint(Theme.gold).padding(.top, 30)
+            }
+
+            if let error = model.errorMessage {
+                InfoCard(icon: "exclamationmark.triangle.fill", text: error)
+            }
         }
     }
 
@@ -74,13 +129,51 @@ struct HomeView: View {
                     .foregroundStyle(Color.white.opacity(0.75))
             }
             Spacer()
-            Button {
-                showRules = true
-            } label: {
-                Image(systemName: "questionmark.circle.fill")
-                    .font(.title)
-                    .foregroundStyle(Color.white.opacity(0.85))
+        }
+    }
+}
+
+// MARK: Ecranul Scara
+
+struct LadderScreen: View {
+    @ObservedObject var model: AppModel
+
+    var body: some View {
+        Screen(model: model) {
+            ScreenHeader(icon: "chart.bar.fill", title: L("tab.ladder"))
+            LadderCard(player: model.progress)
+            LadderBoard(level: model.progress.level)
+        }
+    }
+}
+
+// MARK: Ecranul Istoric
+
+struct HistoryScreen: View {
+    @ObservedObject var model: AppModel
+
+    var body: some View {
+        Screen(model: model) {
+            ScreenHeader(icon: "clock.arrow.circlepath", title: L("tab.history"))
+            if model.progress.history.isEmpty {
+                InfoCard(icon: "tray", text: L("history.empty"))
+            } else {
+                HistoryCard(items: model.progress.history)
             }
+        }
+    }
+}
+
+// MARK: Ecranul Profil
+
+struct ProfileScreen: View {
+    @ObservedObject var model: AppModel
+
+    var body: some View {
+        Screen(model: model) {
+            ScreenHeader(icon: "person.fill", title: L("tab.profile"))
+            StatsStrip(player: model.progress)
+            RulesCard()
         }
     }
 }
@@ -650,34 +743,38 @@ struct InfoCard: View {
 
 // MARK: Reguli
 
-struct RulesView: View {
-    @Environment(\.dismiss) private var dismiss
-
+struct RulesCard: View {
     var body: some View {
-        NavigationStack {
-            List {
-                Section(L("rules.section.game")) {
-                    Text(L("rules.game1"))
-                    Text(L("rules.game2"))
-                    Label(L("rules.lock"), systemImage: "lock.fill")
-                    Text(L("rules.game3"))
-                }
-                Section(L("rules.section.safe")) {
-                    Text(L("rules.safe1", formatPoints(Ladder.points(forLevel: 5)), formatPoints(Ladder.points(forLevel: 10))))
-                    Text(L("rules.safe2"))
-                }
-                Section {
-                    Text(L("rules.disclaimer"))
-                        .foregroundStyle(.secondary)
-                }
-            }
-            .navigationTitle(L("rules.title"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(L("common.done")) { dismiss() }
-                }
-            }
+        VStack(alignment: .leading, spacing: 12) {
+            SectionTitle(icon: "questionmark.circle.fill", text: L("rules.title"))
+            rule("soccerball", L("rules.game1"))
+            rule("hand.tap.fill", L("rules.game2"))
+            rule("lock.fill", L("rules.lock"))
+            rule("arrow.up.right.circle.fill", L("rules.game3"))
+
+            SectionTitle(icon: "lock.shield.fill", text: L("rules.section.safe"))
+            rule("arrow.down.circle.fill",
+                 L("rules.safe1", formatPoints(Ladder.points(forLevel: 5)), formatPoints(Ladder.points(forLevel: 10))))
+            rule("moon.zzz.fill", L("rules.safe2"))
+
+            Text(L("rules.disclaimer"))
+                .font(.caption)
+                .foregroundStyle(Color.white.opacity(0.55))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .card()
+    }
+
+    private func rule(_ icon: String, _ text: String) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: icon)
+                .foregroundStyle(Theme.gold)
+                .frame(width: 24)
+            Text(text)
+                .font(.subheadline)
+                .foregroundStyle(Color.white.opacity(0.9))
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }

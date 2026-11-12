@@ -38,3 +38,8 @@
 "match.final" = "Endstand";
 "ladder.here" = "Du bist hier";
 "ladder.safe" = "Garantiert";
+"tab.match" = "Spiel";
+"tab.ladder" = "Leiter";
+"tab.history" = "Verlauf";
+"tab.profile" = "Profil";
+"history.empty" = "Hier erscheinen deine Tipps, sobald die Spiele beendet sind.";

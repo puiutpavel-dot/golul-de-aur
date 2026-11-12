@@ -4,7 +4,7 @@ import SwiftUI
 struct GolulDeAurApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            RootView()
                 .preferredColorScheme(.dark)
         }
     }

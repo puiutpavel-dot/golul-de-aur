@@ -38,3 +38,8 @@
 "match.final" = "Final";
 "ladder.here" = "Ești aici";
 "ladder.safe" = "Garantat";
+"tab.match" = "Meci";
+"tab.ladder" = "Scara";
+"tab.history" = "Istoric";
+"tab.profile" = "Profil";
+"history.empty" = "Aici apar pronosticurile tale după ce se termină meciurile.";

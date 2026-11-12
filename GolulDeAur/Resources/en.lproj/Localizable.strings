@@ -38,3 +38,8 @@
 "match.final" = "Full time";
 "ladder.here" = "You are here";
 "ladder.safe" = "Guaranteed";
+"tab.match" = "Match";
+"tab.ladder" = "Ladder";
+"tab.history" = "History";
+"tab.profile" = "Profile";
+"history.empty" = "Your predictions appear here after the matches end.";
