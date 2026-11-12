@@ -75,6 +75,8 @@ struct HistoryItem: Codable, Identifiable {
     let outcome: String
     let levelBefore: Int?
     let levelAfter: Int?
+    /// Ajutorul folosit la acest meci, daca a fost unul.
+    var lifeline: String? = nil
 
     var id: String { day }
 }
@@ -89,6 +91,10 @@ struct LocalProgress: Codable {
     var picks: [String: String] = [:]
     /// Pronosticuri incheiate, de la cel mai nou la cel mai vechi.
     var history: [HistoryItem] = []
+    /// Ajutoarele deja folosite pe scara curenta (optional, ca datele vechi sa se citeasca in continuare).
+    var usedLifelines: [String]?
+    /// Ajutorul activ pe pronosticurile in asteptare: zi -> ajutor.
+    var activeLifelines: [String: String]?
 
     private static let storageKey = "progress"
 
@@ -105,6 +111,27 @@ struct LocalProgress: Codable {
             UserDefaults.standard.set(data, forKey: Self.storageKey)
         }
     }
+}
+
+// MARK: Ajutoare
+
+/// Cate unul pe meci; fiecare o singura data pe scara.
+enum Lifeline: String, CaseIterable {
+    /// Alegi doua variante din trei.
+    case double
+    /// Daca gresesti, ramai pe aceeasi treapta.
+    case safety
+    /// Daca ghicesti, urci doua trepte.
+    case boost
+}
+
+/// Rezultatul unui pronostic incheiat, dupa regulile scarii.
+struct Settlement {
+    let outcome: String
+    let level: Int
+    let wonMillion: Bool
+    /// Ajutoarele revin cand o iei de la zero sau castigi milionul.
+    let resetsLifelines: Bool
 }
 
 // MARK: Scara de puncte
@@ -125,6 +152,23 @@ enum Ladder {
 
     /// Regula jocului: corect = urci o treapta (la a 15-a castigi milionul si
     /// incepi o scara noua); gresit = cobori la ultimul prag garantat.
+    /// Aplica un pronostic incheiat: `pick` poate avea doua variante ("1X") la Sansa dubla.
+    static func settle(level: Int, pick: String, result: String, lifeline: Lifeline?) -> Settlement {
+        if pick.contains(result) {
+            let target = level + (lifeline == .boost ? 2 : 1)
+            if target >= steps.count {
+                return Settlement(outcome: "correct", level: 0, wonMillion: true, resetsLifelines: true)
+            }
+            return Settlement(outcome: "correct", level: target, wonMillion: false, resetsLifelines: false)
+        }
+        if lifeline == .safety {
+            return Settlement(outcome: "saved", level: level, wonMillion: false, resetsLifelines: false)
+        }
+        let dropped = nextLevel(from: level, correct: false)
+        return Settlement(outcome: "wrong", level: dropped, wonMillion: false,
+                          resetsLifelines: dropped == 0 && level > 0)
+    }
+
     static func nextLevel(from level: Int, correct: Bool) -> Int {
         if correct {
             return level >= steps.count - 1 ? 0 : level + 1

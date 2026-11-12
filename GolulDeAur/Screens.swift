@@ -93,8 +93,11 @@ struct MatchScreen: View {
             LadderCard(player: model.progress)
 
             if let match = model.todayMatch {
-                MatchCard(match: match, myPick: model.myPick(for: match)) { choice in
-                    model.pick(choice)
+                MatchCard(match: match, myPick: model.myPick(for: match),
+                          pickLifeline: model.lifeline(for: match),
+                          usedLifelines: model.usedLifelines,
+                          player: model.progress) { choice, lifeline in
+                    model.pick(choice, lifeline: lifeline)
                 }
                 .id(match.day)
             } else if model.hasLoaded {
@@ -142,6 +145,7 @@ struct LadderScreen: View {
         Screen(model: model) {
             ScreenHeader(icon: "chart.bar.fill", title: L("tab.ladder"))
             LadderCard(player: model.progress)
+            ShareButton(title: L("share.button.step"), player: model.progress)
             LadderBoard(level: model.progress.level)
         }
     }
@@ -173,6 +177,7 @@ struct ProfileScreen: View {
         Screen(model: model) {
             ScreenHeader(icon: "person.fill", title: L("tab.profile"))
             StatsStrip(player: model.progress)
+            NotificationsCard(model: model)
             RulesCard()
         }
     }
@@ -274,7 +279,7 @@ struct StatsStrip: View {
 
     private var accuracy: String {
         let correct = player.history.filter { $0.outcome == "correct" }.count
-        let wrong = player.history.filter { $0.outcome == "wrong" }.count
+        let wrong = player.history.filter { $0.outcome == "wrong" || $0.outcome == "saved" }.count
         guard correct + wrong > 0 else { return "–" }
         return "\(Int((Double(correct) / Double(correct + wrong) * 100).rounded()))%"
     }
@@ -313,258 +318,6 @@ struct StatsStrip: View {
             }
         )
         .overlay(shape.stroke(color.opacity(0.45), lineWidth: 1))
-    }
-}
-
-// MARK: Meciul zilei
-
-struct MatchCard: View {
-    let match: Match
-    let myPick: String?
-    let onConfirm: (String) -> Void
-
-    /// Varianta atinsa, inca neconfirmata.
-    @State private var selected: String?
-
-    var body: some View {
-        TimelineView(.periodic(from: Date(), by: 30)) { context in
-            content(now: context.date)
-        }
-    }
-
-    private func content(now: Date) -> some View {
-        let isOpen = match.isOpen(at: now)
-        let canChoose = isOpen && myPick == nil
-
-        return VStack(spacing: 16) {
-            HStack {
-                Pill(icon: "sportscourt.fill", text: match.league.uppercased())
-                Spacer()
-                stagePill(isOpen: isOpen, now: now)
-            }
-
-            Text(kickoffText)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(Color.white.opacity(0.75))
-
-            HStack(alignment: .top, spacing: 8) {
-                team(match.homeTeam)
-                scoreBox
-                team(match.awayTeam)
-            }
-
-            statusBanner(isOpen: isOpen)
-
-            VStack(spacing: 10) {
-                option(letter: "A", choice: "1", title: match.homeTeam, odds: match.oddsHome, canChoose: canChoose)
-                option(letter: "B", choice: "X", title: L("option.draw"), odds: match.oddsDraw, canChoose: canChoose)
-                option(letter: "C", choice: "2", title: match.awayTeam, odds: match.oddsAway, canChoose: canChoose)
-            }
-
-            if canChoose, let choice = selected {
-                VStack(spacing: 8) {
-                    Button {
-                        onConfirm(choice)
-                    } label: {
-                        Label(L("pick.confirm"), systemImage: "lock.fill")
-                            .font(.headline)
-                            .foregroundStyle(Color.black.opacity(0.85))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 15)
-                            .background(Theme.goldGradient,
-                                        in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                            .shadow(color: Theme.gold.opacity(0.55), radius: 10, x: 0, y: 0)
-                    }
-                    .buttonStyle(.plain)
-
-                    Label(L("pick.warning"), systemImage: "exclamationmark.triangle.fill")
-                        .font(.caption)
-                        .foregroundStyle(Theme.goldLight)
-                        .multilineTextAlignment(.center)
-                }
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .card(highlighted: canChoose)
-    }
-
-    // MARK: Parti
-
-    private var kickoffText: String {
-        guard let kickoff = match.kickoff else { return "" }
-        let formatter = DateFormatter()
-        formatter.setLocalizedDateFormatFromTemplate("EEEdMMMMHHmm")
-        return formatter.string(from: kickoff)
-    }
-
-    private func countdown(to kickoff: Date, from now: Date) -> String {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.day, .hour, .minute]
-        formatter.unitsStyle = .abbreviated
-        formatter.maximumUnitCount = 2
-        return formatter.string(from: max(60, kickoff.timeIntervalSince(now))) ?? ""
-    }
-
-    @ViewBuilder
-    private func stagePill(isOpen: Bool, now: Date) -> some View {
-        if match.isFinished {
-            Pill(icon: "flag.checkered", text: L("match.final"))
-        } else if match.isVoid {
-            Pill(icon: "minus.circle.fill", text: "–")
-        } else if isOpen, let kickoff = match.kickoff {
-            Pill(icon: "timer", text: L("match.countdown", countdown(to: kickoff, from: now)),
-                 color: Theme.gold.opacity(0.22), foreground: Theme.goldLight)
-        } else {
-            Pill(icon: "dot.radiowaves.left.and.right", text: L("match.live"),
-                 color: Theme.wrong.opacity(0.85), foreground: Color.white)
-        }
-    }
-
-    private func team(_ name: String) -> some View {
-        VStack(spacing: 8) {
-            TeamBadge(name: name)
-            Text(name)
-                .font(.headline.weight(.bold))
-                .foregroundStyle(Color.white)
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-                .minimumScaleFactor(0.7)
-        }
-        .frame(maxWidth: .infinity)
-    }
-
-    private var scoreBox: some View {
-        Group {
-            if let home = match.homeScore, let away = match.awayScore {
-                Text("\(home) - \(away)")
-                    .font(.system(size: 30, weight: .heavy, design: .rounded))
-                    .foregroundStyle(Theme.goldGradient)
-                    .lineLimit(1)
-                    .fixedSize()
-            } else {
-                Text("VS")
-                    .font(.system(size: 18, weight: .heavy, design: .rounded))
-                    .foregroundStyle(Color.black.opacity(0.85))
-                    .frame(width: 46, height: 46)
-                    .background(Theme.goldGradient, in: Circle())
-                    .shadow(color: Theme.gold.opacity(0.6), radius: 8, x: 0, y: 0)
-            }
-        }
-        .frame(height: 66)
-    }
-
-    private func statusBanner(isOpen: Bool) -> some View {
-        var icon = "hand.tap.fill"
-        var color = Color.white.opacity(0.1)
-        var text = L("status.open.nopick")
-
-        if match.isVoid {
-            icon = "minus.circle.fill"
-            text = L("status.void")
-        } else if match.isFinished {
-            if let pick = myPick {
-                let correct = pick == match.result
-                icon = correct ? "checkmark.seal.fill" : "xmark.seal.fill"
-                color = (correct ? Theme.correct : Theme.wrong).opacity(0.55)
-                text = correct ? L("status.correct") : L("status.wrong")
-            } else {
-                icon = "moon.zzz.fill"
-                text = L("status.nopick")
-            }
-        } else if isOpen {
-            if myPick != nil {
-                icon = "lock.fill"
-                color = Theme.gold.opacity(0.22)
-                text = L("status.open.picked")
-            }
-        } else {
-            icon = myPick == nil ? "lock.slash.fill" : "hourglass"
-            text = myPick == nil ? L("status.started.nopick") : L("status.started.picked")
-        }
-
-        return HStack(spacing: 10) {
-            Image(systemName: icon)
-                .font(.title3)
-                .foregroundStyle(Theme.goldLight)
-            Text(text)
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(Color.white.opacity(0.92))
-                .fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: 0)
-        }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .background(color, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-    }
-
-    private func option(letter: String, choice: String, title: String, odds: Double, canChoose: Bool) -> some View {
-        let isMine = myPick == choice
-        let isSelected = myPick == nil && selected == choice
-        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
-
-        return Button {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
-                selected = choice
-            }
-        } label: {
-            HStack(spacing: 12) {
-                Text(letter)
-                    .font(.system(size: 17, weight: .heavy, design: .rounded))
-                    .foregroundStyle(Color.black.opacity(0.85))
-                    .frame(width: 34, height: 34)
-                    .background(Theme.goldGradient, in: Circle())
-                Text(title)
-                    .font(.body.weight(.semibold))
-                    .foregroundStyle(Color.white)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                Spacer(minLength: 4)
-                Text(String(format: "%.2f", odds))
-                    .font(.caption.monospacedDigit().weight(.bold))
-                    .foregroundStyle(Color.white.opacity(0.8))
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.black.opacity(0.3), in: Capsule())
-                if isMine {
-                    Image(systemName: "lock.fill")
-                        .foregroundStyle(Theme.goldLight)
-                } else if isSelected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(Color.white)
-                }
-            }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 12)
-            .background(optionColor(choice, isSelected: isSelected), in: shape)
-            .overlay(
-                shape.stroke(Theme.gold.opacity(isMine || isSelected ? 1 : 0.3),
-                             lineWidth: isMine || isSelected ? 2 : 1)
-            )
-            .shadow(color: isMine || isSelected ? Theme.gold.opacity(0.45) : Color.clear,
-                    radius: 8, x: 0, y: 0)
-            .opacity(dimmed(choice) ? 0.5 : 1)
-            .scaleEffect(isSelected ? 1.02 : 1)
-        }
-        .buttonStyle(.plain)
-        .disabled(!canChoose)
-    }
-
-    /// Dupa blocare, variantele nealese raman estompate.
-    private func dimmed(_ choice: String) -> Bool {
-        if match.isFinished {
-            return choice != match.result && choice != myPick
-        }
-        return myPick != nil && myPick != choice
-    }
-
-    private func optionColor(_ choice: String, isSelected: Bool) -> Color {
-        if match.isFinished {
-            if choice == match.result { return Theme.correct }
-            if choice == myPick { return Theme.wrong }
-            return Color.white.opacity(0.08)
-        }
-        if choice == myPick || isSelected { return Theme.gold.opacity(0.35) }
-        return Color.white.opacity(0.08)
     }
 }
 
@@ -672,10 +425,17 @@ struct HistoryCard: View {
                             .foregroundStyle(Color.white)
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
-                        Text(L("history.pick", pickText(item)))
-                            .font(.caption)
-                            .foregroundStyle(Color.white.opacity(0.6))
-                            .lineLimit(1)
+                        HStack(spacing: 5) {
+                            if let lifeline = item.lifeline.flatMap(Lifeline.init(rawValue:)) {
+                                Image(systemName: lifeline.icon)
+                                    .foregroundStyle(Theme.gold)
+                            }
+                            Text(L("history.pick", pickLabel(item.pick, home: item.homeTeam, away: item.awayTeam)))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
+                        }
+                        .font(.caption)
+                        .foregroundStyle(Color.white.opacity(0.6))
                     }
                     Spacer(minLength: 4)
                     if let before = item.levelBefore, let after = item.levelAfter {
@@ -703,18 +463,11 @@ struct HistoryCard: View {
         return "-"
     }
 
-    private func pickText(_ item: HistoryItem) -> String {
-        switch item.pick {
-        case "1": return item.homeTeam
-        case "2": return item.awayTeam
-        default: return L("option.draw")
-        }
-    }
-
     private func icon(for outcome: String) -> String {
         switch outcome {
         case "correct": return "checkmark.circle.fill"
         case "wrong": return "xmark.circle.fill"
+        case "saved": return "shield.lefthalf.filled"
         default: return "minus.circle.fill"
         }
     }
@@ -723,6 +476,7 @@ struct HistoryCard: View {
         switch outcome {
         case "correct": return Theme.correct
         case "wrong": return Theme.wrong
+        case "saved": return Theme.gold
         default: return .gray
         }
     }
@@ -751,6 +505,12 @@ struct RulesCard: View {
             rule("hand.tap.fill", L("rules.game2"))
             rule("lock.fill", L("rules.lock"))
             rule("arrow.up.right.circle.fill", L("rules.game3"))
+
+            SectionTitle(icon: "lifepreserver.fill", text: L("lifeline.title"))
+            rule("lifepreserver.fill", L("rules.lifelines"))
+            ForEach(Lifeline.allCases, id: \.self) { lifeline in
+                rule(lifeline.icon, "\(lifeline.name): \(lifeline.detail)")
+            }
 
             SectionTitle(icon: "lock.shield.fill", text: L("rules.section.safe"))
             rule("arrow.down.circle.fill",
