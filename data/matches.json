@@ -1,4 +1,22 @@
 {
-  "last_pick_day": "2026-11-11",
-  "matches": []
+  "last_pick_day": "2026-11-12",
+  "matches": [
+    {
+      "day": "2026-11-12",
+      "event_id": "c25477408b57267248b491fa5eab2572",
+      "sport_key": "soccer_uefa_nations_league",
+      "league": "UEFA Nations League",
+      "home_team": "Armenia",
+      "away_team": "Cyprus",
+      "commence_time": "2026-11-12T17:00:00Z",
+      "odds_home": 2.63,
+      "odds_draw": 3.14,
+      "odds_away": 2.67,
+      "status": "scheduled",
+      "home_score": null,
+      "away_score": null,
+      "result": null,
+      "last_settle_attempt": null
+    }
+  ]
 }
