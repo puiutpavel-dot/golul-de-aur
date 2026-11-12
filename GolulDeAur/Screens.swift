@@ -26,7 +26,10 @@ struct RootView: View {
                 .tabItem { Label(L("tab.profile"), systemImage: "person.crop.circle.fill") }
         }
         .tint(Theme.gold)
-        .task { await model.refresh() }
+        .task {
+            GameCenter.shared.start()
+            await model.refresh()
+        }
         .onChange(of: scenePhase) { phase in
             if phase == .active {
                 Task { await model.refresh() }
@@ -177,6 +180,8 @@ struct ProfileScreen: View {
         Screen(model: model) {
             ScreenHeader(icon: "person.fill", title: L("tab.profile"))
             StatsStrip(player: model.progress)
+            LeaderboardCard()
+            BadgesCard(earned: Set(model.progress.badges ?? []))
             NotificationsCard(model: model)
             RulesCard()
         }

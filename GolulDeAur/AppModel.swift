@@ -32,6 +32,9 @@ final class AppModel: ObservableObject {
             hasLoaded = true
             errorMessage = nil
             settleFinishedMatches()
+            awardBadges()
+            // Cel mai bun punctaj: milioanele castigate plus punctele treptei curente.
+            GameCenter.shared.submit(score: progress.millions * 1_000_000 + Ladder.points(forLevel: progress.level))
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -60,6 +63,13 @@ final class AppModel: ObservableObject {
             }
             syncReminders()
         }
+    }
+
+    private func awardBadges() {
+        let earned = Set(progress.badges ?? []).union(Badge.earned(by: progress))
+        guard earned.count != (progress.badges ?? []).count else { return }
+        progress.badges = Badge.allCases.map(\.rawValue).filter(earned.contains)
+        progress.save()
     }
 
     func syncReminders() {

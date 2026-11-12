@@ -65,3 +65,13 @@
 "share.cta" = "وما رأيك أنت؟ العب Golden Goal.";
 "share.button.pick" = "شارك التوقع";
 "share.button.step" = "شارك درجتي";
+"badge.title" = "الأوسمة";
+"badge.first" = "الهدف الأول";
+"badge.streak3" = "3 متتالية";
+"badge.streak5" = "5 متتالية";
+"badge.step5" = "الدرجة 5";
+"badge.step10" = "الدرجة 10";
+"badge.million" = "المليون الأول";
+"gc.leaderboard" = "الترتيب العالمي";
+"gc.desc" = "أفضل نتيجة لك مقارنة باللاعبين الآخرين عبر Game Center.";
+"gc.signin" = "سجّل الدخول إلى Game Center من إعدادات الهاتف ثم عُد.";

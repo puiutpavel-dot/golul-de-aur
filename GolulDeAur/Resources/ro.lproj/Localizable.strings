@@ -65,3 +65,13 @@
 "share.cta" = "Tu ce zici? Joacă în Golden Goal.";
 "share.button.pick" = "Distribuie pronosticul";
 "share.button.step" = "Distribuie treapta";
+"badge.title" = "Insigne";
+"badge.first" = "Primul gol";
+"badge.streak3" = "3 la rând";
+"badge.streak5" = "5 la rând";
+"badge.step5" = "Treapta 5";
+"badge.step10" = "Treapta 10";
+"badge.million" = "Primul milion";
+"gc.leaderboard" = "Clasament mondial";
+"gc.desc" = "Cel mai bun punctaj al tău, comparat cu ceilalți jucători prin Game Center.";
+"gc.signin" = "Conectează-te la Game Center din Setările telefonului, apoi revino.";

@@ -70,6 +70,14 @@ def main():
         print(f"Bundle ID inregistrat acum: {BUNDLE_ID}")
     team = bundle["attributes"]["seedId"]
 
+    # Game Center: capabilitatea trebuie sa fie activa pe bundle ID, altfel profilul nu o contine.
+    caps = api("GET", f"/v1/bundleIds/{bundle['id']}/bundleIdCapabilities")["data"]
+    if not any(c["attributes"]["capabilityType"] == "GAME_CENTER" for c in caps):
+        api("POST", "/v1/bundleIdCapabilities", {"data": {"type": "bundleIdCapabilities",
+            "attributes": {"capabilityType": "GAME_CENTER"},
+            "relationships": {"bundleId": {"data": {"type": "bundleIds", "id": bundle["id"]}}}}})
+        print("Game Center activat pe bundle ID")
+
     apps = api("GET", f"/v1/apps?filter[bundleId]={BUNDLE_ID}")["data"]
     if not apps:
         raise SystemExit(

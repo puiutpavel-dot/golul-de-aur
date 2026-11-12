@@ -65,3 +65,13 @@
 "share.cta" = "Und du? Spiel Golden Goal.";
 "share.button.pick" = "Tipp teilen";
 "share.button.step" = "Meine Stufe teilen";
+"badge.title" = "Abzeichen";
+"badge.first" = "Erstes Tor";
+"badge.streak3" = "3 in Folge";
+"badge.streak5" = "5 in Folge";
+"badge.step5" = "Stufe 5";
+"badge.step10" = "Stufe 10";
+"badge.million" = "Erste Million";
+"gc.leaderboard" = "Weltrangliste";
+"gc.desc" = "Dein bester Punktestand im Vergleich mit anderen Spielern, über Game Center.";
+"gc.signin" = "Melde dich in den Einstellungen des Telefons bei Game Center an und komm zurück.";

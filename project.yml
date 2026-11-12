@@ -19,6 +19,10 @@ targets:
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         ITSAppUsesNonExemptEncryption: false
+    entitlements:
+      path: GolulDeAur/GolulDeAur.entitlements
+      properties:
+        com.apple.developer.game-center: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: ro.draghicioiu.goluldeaur

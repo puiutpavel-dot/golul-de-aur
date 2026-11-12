@@ -65,3 +65,13 @@
 "share.cta" = "E você? Jogue Golden Goal.";
 "share.button.pick" = "Compartilhar palpite";
 "share.button.step" = "Compartilhar meu degrau";
+"badge.title" = "Conquistas";
+"badge.first" = "Primeiro gol";
+"badge.streak3" = "3 seguidos";
+"badge.streak5" = "5 seguidos";
+"badge.step5" = "Degrau 5";
+"badge.step10" = "Degrau 10";
+"badge.million" = "Primeiro milhão";
+"gc.leaderboard" = "Ranking mundial";
+"gc.desc" = "Sua melhor pontuação contra outros jogadores, pelo Game Center.";
+"gc.signin" = "Entre no Game Center nos Ajustes do telefone e volte.";

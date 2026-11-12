@@ -65,3 +65,13 @@
 "share.cta" = "What's your call? Play Golden Goal.";
 "share.button.pick" = "Share prediction";
 "share.button.step" = "Share my step";
+"badge.title" = "Badges";
+"badge.first" = "First goal";
+"badge.streak3" = "3 in a row";
+"badge.streak5" = "5 in a row";
+"badge.step5" = "Step 5";
+"badge.step10" = "Step 10";
+"badge.million" = "First million";
+"gc.leaderboard" = "World leaderboard";
+"gc.desc" = "Your best score against other players, through Game Center.";
+"gc.signin" = "Sign in to Game Center in your phone's Settings, then come back.";

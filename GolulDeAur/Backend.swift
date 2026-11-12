@@ -95,6 +95,8 @@ struct LocalProgress: Codable {
     var usedLifelines: [String]?
     /// Ajutorul activ pe pronosticurile in asteptare: zi -> ajutor.
     var activeLifelines: [String: String]?
+    /// Insignele castigate (raman chiar daca apoi cobori pe scara).
+    var badges: [String]?
 
     private static let storageKey = "progress"
 

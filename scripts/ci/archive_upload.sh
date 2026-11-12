@@ -29,6 +29,7 @@ if ! archive CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY=- PROVISIONING_PROFILE_SP
   ENT="$OUT_DIR/ent.plist"
   /usr/libexec/PlistBuddy -c "Add :application-identifier string $TEAM_ID.$BUNDLE_ID" "$ENT"
   /usr/libexec/PlistBuddy -c "Add :com.apple.developer.team-identifier string $TEAM_ID" "$ENT"
+  /usr/libexec/PlistBuddy -c "Add :com.apple.developer.game-center bool true" "$ENT"
   codesign --force --sign - --entitlements "$ENT" --generate-entitlement-der "$APP"
 fi
 
