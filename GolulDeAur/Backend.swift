@@ -58,7 +58,7 @@ struct Match: Decodable {
     var isFinished: Bool { status == "finished" }
     var isVoid: Bool { status == "void" }
 
-    /// Se mai poate alege sau schimba pronosticul?
+    /// Se mai poate da pronostic (meciul nu a inceput)?
     func isOpen(at now: Date = Date()) -> Bool {
         guard status == "scheduled", let kickoff else { return false }
         return kickoff > now

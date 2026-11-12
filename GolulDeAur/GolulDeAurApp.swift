@@ -16,6 +16,11 @@ enum Theme {
         startPoint: .top, endPoint: .bottom)
     static let gold = Color(red: 0.96, green: 0.77, blue: 0.22)
     static let card = Color.white.opacity(0.08)
+    static let cardBase = Color(red: 0.02, green: 0.11, blue: 0.08).opacity(0.92)
+    static let goldLight = Color(red: 1.0, green: 0.90, blue: 0.55)
+    static let goldDark = Color(red: 0.78, green: 0.55, blue: 0.10)
+    static let goldGradient = LinearGradient(
+        colors: [goldLight, gold, goldDark], startPoint: .top, endPoint: .bottom)
     static let correct = Color(red: 0.13, green: 0.65, blue: 0.33)
     static let wrong = Color(red: 0.80, green: 0.20, blue: 0.20)
 }

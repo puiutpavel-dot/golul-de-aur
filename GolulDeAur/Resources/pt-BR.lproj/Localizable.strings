@@ -8,7 +8,7 @@
 "status.correct" = "Você acertou! Subiu um degrau.";
 "status.wrong" = "Não foi desta vez.";
 "status.open.nopick" = "Quem vence? Escolha antes do início.";
-"status.open.picked" = "Palpite salvo. Você pode mudar até o início.";
+"status.open.picked" = "Palpite travado. O resultado aparece depois do jogo.";
 "status.started.nopick" = "O jogo começou. Os palpites estão encerrados.";
 "status.started.picked" = "O jogo começou. O resultado aparece após o apito final.";
 "option.draw" = "Empate";
@@ -26,3 +26,15 @@
 "rules.safe2" = "Se pular um dia, você fica no mesmo degrau.";
 "rules.disclaimer" = "Os pontos são virtuais e não têm valor em dinheiro. As cotações são exibidas apenas como informação.";
 "error.load" = "Não foi possível carregar o jogo do dia. Tente novamente.";
+"pick.confirm" = "Confirmar palpite";
+"pick.warning" = "Depois de confirmado, não dá para alterar.";
+"pick.locked" = "Travado";
+"rules.lock" = "O palpite é confirmado uma única vez. Depois não pode ser alterado.";
+"stats.streak" = "Sequência";
+"stats.accuracy" = "Acertos";
+"stats.millions" = "Milhões";
+"match.countdown" = "Começa em %@";
+"match.live" = "Em andamento";
+"match.final" = "Fim de jogo";
+"ladder.here" = "Você está aqui";
+"ladder.safe" = "Garantido";

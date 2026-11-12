@@ -8,7 +8,7 @@
 "status.correct" = "Richtig getippt! Du steigst eine Stufe auf.";
 "status.wrong" = "Diesmal leider nicht.";
 "status.open.nopick" = "Wer gewinnt? Wähle vor dem Anpfiff.";
-"status.open.picked" = "Tipp gespeichert. Du kannst ihn bis zum Anpfiff ändern.";
+"status.open.picked" = "Tipp gesperrt. Das Ergebnis erscheint nach dem Spiel.";
 "status.started.nopick" = "Das Spiel hat begonnen. Tipps sind geschlossen.";
 "status.started.picked" = "Das Spiel hat begonnen. Das Ergebnis erscheint nach dem Abpfiff.";
 "option.draw" = "Unentschieden";
@@ -26,3 +26,15 @@
 "rules.safe2" = "Wenn du einen Tag auslässt, bleibst du auf derselben Stufe.";
 "rules.disclaimer" = "Die Punkte sind virtuell und haben keinen Geldwert. Quoten dienen nur zur Information.";
 "error.load" = "Das Spiel des Tages konnte nicht geladen werden. Bitte versuche es erneut.";
+"pick.confirm" = "Tipp bestätigen";
+"pick.warning" = "Nach der Bestätigung ist keine Änderung mehr möglich.";
+"pick.locked" = "Gesperrt";
+"rules.lock" = "Ein Tipp wird nur einmal bestätigt. Danach kann er nicht mehr geändert werden.";
+"stats.streak" = "Serie";
+"stats.accuracy" = "Trefferquote";
+"stats.millions" = "Millionen";
+"match.countdown" = "Anstoß in %@";
+"match.live" = "Läuft";
+"match.final" = "Endstand";
+"ladder.here" = "Du bist hier";
+"ladder.safe" = "Garantiert";

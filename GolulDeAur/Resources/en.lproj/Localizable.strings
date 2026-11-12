@@ -8,7 +8,7 @@
 "status.correct" = "You got it right! You climbed one step.";
 "status.wrong" = "Not this time.";
 "status.open.nopick" = "Who wins? Choose before kick-off.";
-"status.open.picked" = "Prediction saved. You can change it until kick-off.";
+"status.open.picked" = "Prediction locked. The result appears after the match.";
 "status.started.nopick" = "The match has started. Predictions are closed.";
 "status.started.picked" = "The match has started. The result appears after full time.";
 "option.draw" = "Draw";
@@ -26,3 +26,15 @@
 "rules.safe2" = "If you skip a day, you stay on the same step.";
 "rules.disclaimer" = "Points are virtual and have no cash value. Odds are shown for information only.";
 "error.load" = "Could not load the match of the day. Please try again.";
+"pick.confirm" = "Confirm prediction";
+"pick.warning" = "Once confirmed, it cannot be changed.";
+"pick.locked" = "Locked";
+"rules.lock" = "A prediction is confirmed only once. After that it cannot be changed.";
+"stats.streak" = "Streak";
+"stats.accuracy" = "Accuracy";
+"stats.millions" = "Millions";
+"match.countdown" = "Kick-off in %@";
+"match.live" = "In play";
+"match.final" = "Full time";
+"ladder.here" = "You are here";
+"ladder.safe" = "Guaranteed";

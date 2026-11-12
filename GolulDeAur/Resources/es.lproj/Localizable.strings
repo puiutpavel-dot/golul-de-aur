@@ -8,7 +8,7 @@
 "status.correct" = "¡Acertaste! Subiste un peldaño.";
 "status.wrong" = "Esta vez no acertaste.";
 "status.open.nopick" = "¿Quién gana? Elige antes del inicio.";
-"status.open.picked" = "Pronóstico guardado. Puedes cambiarlo hasta el inicio.";
+"status.open.picked" = "Pronóstico bloqueado. El resultado aparece después del partido.";
 "status.started.nopick" = "El partido ha comenzado. Los pronósticos están cerrados.";
 "status.started.picked" = "El partido ha comenzado. El resultado aparece al final.";
 "option.draw" = "Empate";
@@ -26,3 +26,15 @@
 "rules.safe2" = "Si un día no haces pronóstico, te quedas en el mismo peldaño.";
 "rules.disclaimer" = "Los puntos son virtuales y no tienen valor monetario. Las cuotas se muestran solo como información.";
 "error.load" = "No se pudo cargar el partido del día. Inténtalo de nuevo.";
+"pick.confirm" = "Confirmar pronóstico";
+"pick.warning" = "Una vez confirmado, no se puede cambiar.";
+"pick.locked" = "Bloqueado";
+"rules.lock" = "El pronóstico se confirma una sola vez. Después no se puede cambiar.";
+"stats.streak" = "Racha";
+"stats.accuracy" = "Aciertos";
+"stats.millions" = "Millones";
+"match.countdown" = "Empieza en %@";
+"match.live" = "En juego";
+"match.final" = "Final";
+"ladder.here" = "Estás aquí";
+"ladder.safe" = "Garantizado";

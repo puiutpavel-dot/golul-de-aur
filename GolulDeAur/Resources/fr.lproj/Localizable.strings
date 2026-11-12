@@ -8,7 +8,7 @@
 "status.correct" = "Bien vu ! Vous montez d'un palier.";
 "status.wrong" = "Pas cette fois.";
 "status.open.nopick" = "Qui gagne ? Choisissez avant le coup d'envoi.";
-"status.open.picked" = "Pronostic enregistré. Vous pouvez le modifier jusqu'au coup d'envoi.";
+"status.open.picked" = "Pronostic verrouillé. Le résultat apparaît après le match.";
 "status.started.nopick" = "Le match a commencé. Les pronostics sont clos.";
 "status.started.picked" = "Le match a commencé. Le résultat apparaît après le coup de sifflet final.";
 "option.draw" = "Match nul";
@@ -26,3 +26,15 @@
 "rules.safe2" = "Si vous sautez un jour, vous restez au même palier.";
 "rules.disclaimer" = "Les points sont virtuels et n'ont aucune valeur monétaire. Les cotes sont affichées à titre indicatif.";
 "error.load" = "Impossible de charger le match du jour. Réessayez.";
+"pick.confirm" = "Confirmer le pronostic";
+"pick.warning" = "Une fois confirmé, il ne peut plus être modifié.";
+"pick.locked" = "Verrouillé";
+"rules.lock" = "Le pronostic se confirme une seule fois. Ensuite, il ne peut plus être modifié.";
+"stats.streak" = "Série";
+"stats.accuracy" = "Précision";
+"stats.millions" = "Millions";
+"match.countdown" = "Coup d'envoi dans %@";
+"match.live" = "En cours";
+"match.final" = "Terminé";
+"ladder.here" = "Vous êtes ici";
+"ladder.safe" = "Garanti";

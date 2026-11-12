@@ -28,8 +28,9 @@ final class AppModel: ObservableObject {
         }
     }
 
+    /// Pronosticul se da o singura data: dupa confirmare nu mai poate fi schimbat.
     func pick(_ choice: String) {
-        guard let match = todayMatch, match.isOpen() else { return }
+        guard let match = todayMatch, match.isOpen(), myPick(for: match) == nil else { return }
         progress.picks[match.day] = choice
         progress.save()
     }
