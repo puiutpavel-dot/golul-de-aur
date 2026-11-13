@@ -1,5 +1,5 @@
 "app.tagline" = "Un meci pe zi. 15 trepte până la milion.";
-"match.none" = "Meciul zilei apare în fiecare dimineață, după ora 9:00.";
+"match.none" = "Meciul zilei apare în fiecare dimineață.";
 "ladder.step" = "Treapta %lld din 15";
 "ladder.next" = "Următoarea treaptă: %@";
 "points.format" = "%@ puncte";

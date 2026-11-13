@@ -1,12 +1,14 @@
 // Golul de Aur - sincronizare (ruleaza din GitHub Actions la fiecare 30 de minute).
-// 1) O data pe zi, dupa ora 09:00 (ora Romaniei), alege meciul cu cele mai apropiate cote 1-X-2.
+// 1) O data pe zi, la prima rulare de dupa miezul noptii (ora Romaniei), alege meciul zilei:
+//    cel cu cele mai apropiate cote 1-X-2. GitHub intarzie des rularile programate (uneori cu ore),
+//    asa ca alegem cat mai devreme, ca meciul sa fie in aplicatie dimineata.
 // 2) Dupa meci, ia scorul final.
 // Rezultatul se scrie in data/matches.json, de unde il citeste aplicatia.
 import { readFile, writeFile } from "node:fs/promises";
 
 const DATA_FILE = new URL("../data/matches.json", import.meta.url);
 const ODDS_BASE = "https://api.the-odds-api.com/v4";
-const PICK_HOUR = 9; // ora Romaniei de la care se alege meciul zilei
+const PICK_HOUR = 0; // ora Romaniei de la care se alege meciul zilei
 const MAX_LEAGUES = 8; // cate competitii verificam pe zi (1 credit fiecare)
 const MIN_BOOKMAKERS = 3;
 const KEEP_MATCHES = 45;
@@ -76,14 +78,15 @@ export function toCandidate(event) {
   };
 }
 
-async function pickMatch(apiKey, day) {
+async function pickMatch(apiKey, day, hour) {
   const sportsRes = await fetch(`${ODDS_BASE}/sports/?apiKey=${apiKey}`); // nu consuma credite
   if (!sportsRes.ok) throw new Error(`sports ${sportsRes.status}`);
   const active = new Set((await sportsRes.json()).filter((s) => s.active).map((s) => s.key));
   const leagues = PREFERRED.filter((key) => active.has(key)).slice(0, MAX_LEAGUES);
 
   const from = isoNoMillis(new Date(Date.now() + 60 * 60 * 1000));
-  const to = isoNoMillis(new Date(Date.now() + 20 * 60 * 60 * 1000));
+  // Pana la sfarsitul zilei din Romania, ca meciul ales sa se joace chiar azi.
+  const to = isoNoMillis(new Date(Date.now() + Math.max(2, 24 - hour) * 60 * 60 * 1000));
   const candidates = [];
 
   for (const league of leagues) {
@@ -145,7 +148,7 @@ export async function main() {
     // Marcam ziua chiar daca apelul esueaza, ca sa nu consumam credite de doua ori.
     data.last_pick_day = day;
     try {
-      const match = await pickMatch(apiKey, day);
+      const match = await pickMatch(apiKey, day, hour);
       if (match) {
         data.matches = [match, ...data.matches.filter((m) => m.day !== day)].slice(0, KEEP_MATCHES);
         console.log(`ales: ${match.home_team} - ${match.away_team}`);
