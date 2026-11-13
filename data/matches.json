@@ -1,6 +1,23 @@
 {
-  "last_pick_day": "2026-11-12",
+  "last_pick_day": "2026-11-13",
   "matches": [
+    {
+      "day": "2026-11-13",
+      "event_id": "cc1ca0aea8a9aa6ad2e1537834fe0d04",
+      "sport_key": "soccer_uefa_nations_league",
+      "league": "UEFA Nations League",
+      "home_team": "Moldova",
+      "away_team": "Kazakhstan",
+      "commence_time": "2026-11-13T17:00:00Z",
+      "odds_home": 2.68,
+      "odds_draw": 2.91,
+      "odds_away": 2.81,
+      "status": "scheduled",
+      "home_score": null,
+      "away_score": null,
+      "result": null,
+      "last_settle_attempt": null
+    },
     {
       "day": "2026-11-12",
       "event_id": "c25477408b57267248b491fa5eab2572",
