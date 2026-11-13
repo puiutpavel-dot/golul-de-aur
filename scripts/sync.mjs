@@ -107,8 +107,8 @@ async function pickMatch(apiKey, day, hour) {
 async function settle(apiKey, match) {
   const now = Date.now();
   const kickoff = new Date(match.commence_time).getTime();
-  if (now < kickoff + 135 * 60 * 1000) return; // asteptam start + 2h15
-  if (match.last_settle_attempt && now - new Date(match.last_settle_attempt).getTime() < 25 * 60 * 1000) return;
+  if (now < kickoff + SETTLE_AFTER_MS) return; // asteptam start + 2h15
+  if (match.last_settle_attempt && now - new Date(match.last_settle_attempt).getTime() < SETTLE_EVERY_MS) return;
   match.last_settle_attempt = isoNoMillis(new Date());
 
   if (now - kickoff > 60 * 3_600_000) {
@@ -134,6 +134,29 @@ async function settle(apiKey, match) {
   match.away_score = awayScore;
   match.result = homeScore > awayScore ? "1" : homeScore < awayScore ? "2" : "X";
   console.log(`final: ${match.home_team} ${homeScore}-${awayScore} ${match.away_team}`);
+}
+
+const SETTLE_AFTER_MS = 135 * 60 * 1000; // primul scor il cautam la start + 2h15
+const SETTLE_EVERY_MS = 25 * 60 * 1000; // apoi cel mult o data la 25 de minute
+const WAIT_WINDOW_MS = 5 * 3_600_000; // cat timp dupa start mai asteptam scorul in aceeasi rulare
+
+// Cate secunde sa mai astepte rularea curenta pana la urmatoarea cautare a scorului.
+// 0 = niciun meci in desfasurare sau in asteptarea scorului. GitHub intarzie rularile programate
+// cu ore, asa ca rularea care prinde meciul inceput ramane pornita pana apare scorul final.
+export function secondsUntilNextSettle(data, now = Date.now()) {
+  let wait = 0;
+  for (const match of data.matches) {
+    if (match.status !== "scheduled") continue;
+    const kickoff = new Date(match.commence_time).getTime();
+    if (now < kickoff || now > kickoff + WAIT_WINDOW_MS) continue;
+    let next = kickoff + SETTLE_AFTER_MS;
+    if (match.last_settle_attempt) {
+      next = Math.max(next, new Date(match.last_settle_attempt).getTime() + SETTLE_EVERY_MS);
+    }
+    const seconds = Math.max(60, Math.ceil((next - now) / 1000) + 30);
+    wait = wait === 0 ? seconds : Math.min(wait, seconds);
+  }
+  return wait;
 }
 
 export async function main() {
@@ -169,5 +192,9 @@ export async function main() {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  await main();
+  if (process.argv.includes("--wait")) {
+    console.log(secondsUntilNextSettle(JSON.parse(await readFile(DATA_FILE, "utf8"))));
+  } else {
+    await main();
+  }
 }
