@@ -1,6 +1,23 @@
 {
-  "last_pick_day": "2026-11-13",
+  "last_pick_day": "2026-11-14",
   "matches": [
+    {
+      "day": "2026-11-14",
+      "event_id": "432a7eb09df939bf1e15a3e183f8494f",
+      "sport_key": "soccer_uefa_nations_league",
+      "league": "UEFA Nations League",
+      "home_team": "Northern Ireland",
+      "away_team": "Ukraine",
+      "commence_time": "2026-11-14T19:45:00Z",
+      "odds_home": 2.48,
+      "odds_draw": 2.98,
+      "odds_away": 3.04,
+      "status": "scheduled",
+      "home_score": null,
+      "away_score": null,
+      "result": null,
+      "last_settle_attempt": null
+    },
     {
       "day": "2026-11-13",
       "event_id": "cc1ca0aea8a9aa6ad2e1537834fe0d04",
