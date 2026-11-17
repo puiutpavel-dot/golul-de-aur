@@ -1,6 +1,23 @@
 {
-  "last_pick_day": "2026-11-16",
+  "last_pick_day": "2026-11-17",
   "matches": [
+    {
+      "day": "2026-11-17",
+      "event_id": "aab74efad72e8096e774c7104189ff09",
+      "sport_key": "soccer_uefa_nations_league",
+      "league": "UEFA Nations League",
+      "home_team": "Poland",
+      "away_team": "Sweden",
+      "commence_time": "2026-11-17T19:45:00Z",
+      "odds_home": 2.28,
+      "odds_draw": 3.56,
+      "odds_away": 2.88,
+      "status": "scheduled",
+      "home_score": null,
+      "away_score": null,
+      "result": null,
+      "last_settle_attempt": null
+    },
     {
       "day": "2026-11-16",
       "event_id": "916289ed44f8362ac93035147b7c7fce",
