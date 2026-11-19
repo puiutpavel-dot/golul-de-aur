@@ -1,6 +1,23 @@
 {
-  "last_pick_day": "2026-11-19",
+  "last_pick_day": "2026-11-20",
   "matches": [
+    {
+      "day": "2026-11-20",
+      "event_id": "5dcc9d2b0da87770a4f49e924275be39",
+      "sport_key": "soccer_france_ligue_one",
+      "league": "Ligue 1 - France",
+      "home_team": "Troyes",
+      "away_team": "Le Havre",
+      "commence_time": "2026-11-20T19:45:00Z",
+      "odds_home": 2.13,
+      "odds_draw": 3.43,
+      "odds_away": 3.33,
+      "status": "scheduled",
+      "home_score": null,
+      "away_score": null,
+      "result": null,
+      "last_settle_attempt": null
+    },
     {
       "day": "2026-11-17",
       "event_id": "aab74efad72e8096e774c7104189ff09",
