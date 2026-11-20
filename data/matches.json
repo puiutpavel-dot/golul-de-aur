@@ -1,6 +1,23 @@
 {
-  "last_pick_day": "2026-11-20",
+  "last_pick_day": "2026-11-21",
   "matches": [
+    {
+      "day": "2026-11-21",
+      "event_id": "9f38413bdad666e2d2dfcc574dd12e66",
+      "sport_key": "soccer_epl",
+      "league": "EPL",
+      "home_team": "Coventry City",
+      "away_team": "Crystal Palace",
+      "commence_time": "2026-11-21T15:00:00Z",
+      "odds_home": 2.5,
+      "odds_draw": 3.46,
+      "odds_away": 2.73,
+      "status": "scheduled",
+      "home_score": null,
+      "away_score": null,
+      "result": null,
+      "last_settle_attempt": null
+    },
     {
       "day": "2026-11-20",
       "event_id": "5dcc9d2b0da87770a4f49e924275be39",
@@ -12,11 +29,11 @@
       "odds_home": 2.13,
       "odds_draw": 3.43,
       "odds_away": 3.33,
-      "status": "scheduled",
-      "home_score": null,
-      "away_score": null,
-      "result": null,
-      "last_settle_attempt": null
+      "status": "finished",
+      "home_score": 3,
+      "away_score": 1,
+      "result": "1",
+      "last_settle_attempt": "2026-11-20T22:38:25Z"
     },
     {
       "day": "2026-11-17",
