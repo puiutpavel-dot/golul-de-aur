@@ -1,6 +1,23 @@
 {
-  "last_pick_day": "2026-11-21",
+  "last_pick_day": "2026-11-22",
   "matches": [
+    {
+      "day": "2026-11-22",
+      "event_id": "76d4698a8417f32cb059f14a469939f3",
+      "sport_key": "soccer_italy_serie_a",
+      "league": "Serie A - Italy",
+      "home_team": "Sassuolo",
+      "away_team": "Genoa",
+      "commence_time": "2026-11-22T14:00:00Z",
+      "odds_home": 2.67,
+      "odds_draw": 3.3,
+      "odds_away": 2.63,
+      "status": "scheduled",
+      "home_score": null,
+      "away_score": null,
+      "result": null,
+      "last_settle_attempt": null
+    },
     {
       "day": "2026-11-21",
       "event_id": "9f38413bdad666e2d2dfcc574dd12e66",
