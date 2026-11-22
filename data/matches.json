@@ -12,11 +12,11 @@
       "odds_home": 2.67,
       "odds_draw": 3.3,
       "odds_away": 2.63,
-      "status": "scheduled",
-      "home_score": null,
-      "away_score": null,
-      "result": null,
-      "last_settle_attempt": null
+      "status": "finished",
+      "home_score": 0,
+      "away_score": 2,
+      "result": "2",
+      "last_settle_attempt": "2026-11-22T19:27:34Z"
     },
     {
       "day": "2026-11-21",
