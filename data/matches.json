@@ -1,6 +1,23 @@
 {
-  "last_pick_day": "2026-11-23",
+  "last_pick_day": "2026-11-24",
   "matches": [
+    {
+      "day": "2026-11-24",
+      "event_id": "9a2ebad454db4ab3d53b89e96c79847a",
+      "sport_key": "soccer_uefa_champs_league",
+      "league": "UEFA Champions League",
+      "home_team": "Feyenoord",
+      "away_team": "Porto",
+      "commence_time": "2026-11-24T20:00:00Z",
+      "odds_home": 2.88,
+      "odds_draw": 3.65,
+      "odds_away": 2.3,
+      "status": "scheduled",
+      "home_score": null,
+      "away_score": null,
+      "result": null,
+      "last_settle_attempt": null
+    },
     {
       "day": "2026-11-23",
       "event_id": "aa77e2a08a1a003b0bbb62a5f8e8ae42",
@@ -12,11 +29,11 @@
       "odds_home": 2.27,
       "odds_draw": 3.48,
       "odds_away": 3.07,
-      "status": "scheduled",
-      "home_score": null,
-      "away_score": null,
-      "result": null,
-      "last_settle_attempt": null
+      "status": "finished",
+      "home_score": 4,
+      "away_score": 0,
+      "result": "1",
+      "last_settle_attempt": "2026-11-23T22:15:32Z"
     },
     {
       "day": "2026-11-22",
