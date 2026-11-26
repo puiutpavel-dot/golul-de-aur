@@ -1,6 +1,23 @@
 {
-  "last_pick_day": "2026-11-25",
+  "last_pick_day": "2026-11-26",
   "matches": [
+    {
+      "day": "2026-11-26",
+      "event_id": "31ebd41354699af625fa3372932206f0",
+      "sport_key": "soccer_uefa_europa_league",
+      "league": "UEFA Europa League",
+      "home_team": "Olympiakos Piraeus",
+      "away_team": "AC Milan",
+      "commence_time": "2026-11-26T17:45:00Z",
+      "odds_home": 2.84,
+      "odds_draw": 3.4,
+      "odds_away": 2.42,
+      "status": "scheduled",
+      "home_score": null,
+      "away_score": null,
+      "result": null,
+      "last_settle_attempt": null
+    },
     {
       "day": "2026-11-25",
       "event_id": "49c66d76bc4085e63a181179cc47ef4d",
@@ -12,11 +29,11 @@
       "odds_home": 2.87,
       "odds_draw": 3.48,
       "odds_away": 2.38,
-      "status": "scheduled",
-      "home_score": null,
-      "away_score": null,
-      "result": null,
-      "last_settle_attempt": null
+      "status": "finished",
+      "home_score": 0,
+      "away_score": 1,
+      "result": "2",
+      "last_settle_attempt": "2026-11-26T01:59:59Z"
     },
     {
       "day": "2026-11-24",
