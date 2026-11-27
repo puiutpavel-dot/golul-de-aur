@@ -1,6 +1,23 @@
 {
-  "last_pick_day": "2026-11-26",
+  "last_pick_day": "2026-11-27",
   "matches": [
+    {
+      "day": "2026-11-27",
+      "event_id": "40d95e660c301c2d8a5a7a6317017b65",
+      "sport_key": "soccer_epl",
+      "league": "EPL",
+      "home_team": "Nottingham Forest",
+      "away_team": "Chelsea",
+      "commence_time": "2026-11-27T20:00:00Z",
+      "odds_home": 2.52,
+      "odds_draw": 3.39,
+      "odds_away": 2.78,
+      "status": "scheduled",
+      "home_score": null,
+      "away_score": null,
+      "result": null,
+      "last_settle_attempt": null
+    },
     {
       "day": "2026-11-26",
       "event_id": "31ebd41354699af625fa3372932206f0",
